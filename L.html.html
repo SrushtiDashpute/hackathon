@@ -1,0 +1,3063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnIntelli — Adaptive Learning</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+    overflow-x:hidden;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+    width:245px;
+    background:#111827;
+    color:white;
+    padding:25px 16px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:800;
+    padding:0 12px 30px;
+}
+
+.logo span{
+    color:#6d7cff;
+}
+
+.nav-item{
+    padding:13px 15px;
+    margin:6px 0;
+    border-radius:12px;
+    color:#aeb7ca;
+    transition:.25s;
+    font-size:15px;
+}
+
+.nav-item:hover,
+.nav-item.active{
+    background:#202a42;
+    color:white;
+}
+
+.nav-item span{
+    margin-right:10px;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:245px;
+    width:calc(100% - 245px);
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+    height:75px;
+    background:white;
+    border-bottom:1px solid #e5e9f1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.search{
+    width:330px;
+    padding:12px 17px;
+    border:1px solid #dce2ec;
+    border-radius:12px;
+    outline:none;
+    font-size:14px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#dfe4ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    padding:30px;
+}
+
+.page{
+    display:none;
+    animation:fadeIn .45s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#68738a;
+    margin-bottom:25px;
+}
+
+/* ================= CARDS ================= */
+
+.card{
+    background:white;
+    border:1px solid #e7ebf2;
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 8px 30px rgba(35,50,80,.05);
+}
+
+.grid{
+    display:grid;
+    gap:20px;
+}
+
+.grid-3{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.stat{
+    font-size:30px;
+    font-weight:800;
+    margin:10px 0;
+}
+
+.small{
+    color:#778198;
+    font-size:13px;
+}
+
+/* ================= BUTTONS ================= */
+
+.primary{
+    background:#5967e8;
+    color:white;
+    padding:12px 20px;
+    border-radius:11px;
+    font-weight:700;
+}
+
+.secondary{
+    background:#edf0ff;
+    color:#4c5bd4;
+    padding:12px 20px;
+    border-radius:11px;
+    font-weight:700;
+}
+
+.primary:hover,
+.secondary:hover{
+    transform:translateY(-1px);
+}
+
+/* ================= PROGRESS ================= */
+
+.progress{
+    height:9px;
+    background:#edf0f5;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0;
+}
+
+.progress-bar{
+    height:100%;
+    width:70%;
+    background:#626fe8;
+    border-radius:20px;
+    transition:.5s;
+}
+
+/* ================= INTRO ================= */
+
+#intro{
+    position:fixed;
+    inset:0;
+    background:#10172a;
+    color:white;
+    z-index:100;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.intro-content{
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+.intro-logo{
+    font-size:48px;
+    font-weight:900;
+    letter-spacing:-2px;
+}
+
+.intro-logo span{
+    color:#7c88ff;
+}
+
+.intro-tagline{
+    margin-top:12px;
+    color:#b9c2d8;
+    font-size:17px;
+}
+
+.intro-visual{
+    margin:35px auto;
+    width:210px;
+    height:120px;
+    position:relative;
+}
+
+.robot{
+    position:absolute;
+    left:65px;
+    top:20px;
+    font-size:65px;
+    animation:robotFloat 2s infinite ease-in-out;
+}
+
+.student{
+    position:absolute;
+    right:5px;
+    bottom:0;
+    font-size:48px;
+    animation:studentFloat 2.5s infinite ease-in-out;
+}
+
+@keyframes robotFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+}
+
+@keyframes studentFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-6px)}
+}
+
+.intro-orbit{
+    position:absolute;
+    width:190px;
+    height:190px;
+    border:1px solid rgba(124,136,255,.4);
+    border-radius:50%;
+    left:10px;
+    top:-25px;
+    animation:rotate 8s linear infinite;
+}
+
+@keyframes rotate{
+    to{transform:rotate(360deg)}
+}
+
+.start-btn{
+    background:#6876f0;
+    color:white;
+    padding:14px 35px;
+    border-radius:13px;
+    font-weight:800;
+    font-size:15px;
+}
+
+/* ================= HOME ================= */
+
+.hero{
+    background:linear-gradient(135deg,#5967e8,#7b68dc);
+    color:white;
+    border-radius:22px;
+    padding:30px;
+    margin-bottom:25px;
+}
+
+.hero h2{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    color:#e5e7ff;
+}
+
+.diagnosis{
+    margin-top:20px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.tag{
+    padding:8px 12px;
+    background:rgba(255,255,255,.14);
+    border-radius:20px;
+    font-size:13px;
+}
+
+/* ================= LEARNING ================= */
+
+.lesson-box{
+    line-height:1.7;
+    color:#59657b;
+}
+
+.lesson-box strong{
+    color:#202b42;
+}
+
+.info-list{
+    margin-top:18px;
+    padding-left:20px;
+    line-height:2;
+}
+
+/* ================= VISUAL LEARNING ================= */
+
+.plant-scene{
+    height:380px;
+    border-radius:20px;
+    background:linear-gradient(#cfeaff,#eef9ff);
+    position:relative;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.sun{
+    position:absolute;
+    right:60px;
+    top:35px;
+    font-size:65px;
+    animation:sunPulse 2s infinite;
+}
+
+@keyframes sunPulse{
+    50%{transform:scale(1.08)}
+}
+
+.plant{
+    position:absolute;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+}
+
+.plant .leaf{
+    font-size:120px;
+}
+
+.root{
+    font-size:65px;
+    margin-top:-20px;
+}
+
+.co2,
+.water,
+.oxygen,
+.glucose{
+    position:absolute;
+    padding:10px 15px;
+    border-radius:12px;
+    background:white;
+    box-shadow:0 8px 20px rgba(50,80,100,.12);
+    font-weight:700;
+    font-size:13px;
+}
+
+.co2{
+    left:60px;
+    top:130px;
+    animation:moveRight 3s infinite;
+}
+
+.water{
+    left:130px;
+    bottom:60px;
+    animation:moveUp 3s infinite;
+}
+
+.oxygen{
+    right:90px;
+    top:150px;
+    animation:moveRight 3s infinite reverse;
+}
+
+.glucose{
+    right:80px;
+    bottom:80px;
+}
+
+@keyframes moveRight{
+    50%{transform:translateX(15px)}
+}
+
+@keyframes moveUp{
+    50%{transform:translateY(-12px)}
+}
+
+/* ================= QUIZ ================= */
+
+.quiz-question{
+    font-size:21px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.option{
+    border:1px solid #dfe4ed;
+    padding:15px;
+    border-radius:12px;
+    margin:10px 0;
+    transition:.2s;
+    background:white;
+}
+
+.option:hover{
+    border-color:#6674ea;
+    background:#f7f8ff;
+}
+
+.option.correct{
+    background:#e7f8ed;
+    border-color:#42a967;
+}
+
+.option.wrong{
+    background:#ffe9e9;
+    border-color:#e16c6c;
+}
+
+.result{
+    text-align:center;
+    padding:30px;
+}
+
+.result-score{
+    font-size:55px;
+    font-weight:900;
+    color:#5967e8;
+}
+
+/* =========================================================
+   SMART MISSION
+   ========================================================= */
+
+.mission-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+    gap:20px;
+}
+
+.mission-title h1{
+    margin-bottom:5px;
+}
+
+.mission-title p{
+    color:#758097;
+}
+
+/* Mission map */
+
+.mission-map{
+    background:#11182b;
+    border-radius:24px;
+    padding:30px 25px 24px;
+    color:white;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 15px 45px rgba(15,23,42,.18);
+}
+
+.map-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+}
+
+.map-title{
+    font-weight:800;
+}
+
+.xp{
+    background:#202b45;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+/* LEVEL TRACK */
+
+.level-track{
+    position:relative;
+    max-width:850px;
+    margin:0 auto;
+    height:105px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.level-line{
+    position:absolute;
+    left:7%;
+    right:7%;
+    top:28px;
+    height:5px;
+    background:#39445e;
+    border-radius:20px;
+    z-index:0;
+}
+
+.level-line-progress{
+    position:absolute;
+    left:7%;
+    top:28px;
+    height:5px;
+    width:0%;
+    background:#7281ff;
+    border-radius:20px;
+    z-index:1;
+    transition:width .8s ease;
+}
+
+.level-node{
+    width:80px;
+    position:relative;
+    z-index:3;
+    text-align:center;
+}
+
+.level-circle{
+    width:58px;
+    height:58px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+    font-weight:900;
+    border:3px solid #39445e;
+    background:#202a40;
+    color:#8590a9;
+    transition:.35s;
+}
+
+.level-node.completed .level-circle{
+    background:#5263e9;
+    border-color:#8c98ff;
+    color:white;
+}
+
+.level-node.current .level-circle{
+    background:#ffffff;
+    border-color:#7b89ff;
+    color:#5262e8;
+    box-shadow:0 0 0 7px rgba(114,129,255,.14);
+    transform:scale(1.08);
+}
+
+.level-node.locked .level-circle{
+    background:#1c2539;
+    color:#69748c;
+}
+
+.level-name{
+    margin-top:9px;
+    font-size:12px;
+    color:#aeb7cb;
+}
+
+.level-node.current .level-name{
+    color:white;
+    font-weight:800;
+}
+
+/* Character */
+
+.character-wrap{
+    position:absolute;
+    top:78px;
+    left:0;
+    width:100%;
+    height:70px;
+    pointer-events:none;
+}
+
+.map-character{
+    position:absolute;
+    left:7%;
+    transform:translateX(-50%);
+    font-size:43px;
+    transition:left 1s cubic-bezier(.2,.8,.2,1);
+    animation:characterBounce .8s infinite ease-in-out;
+    z-index:5;
+}
+
+@keyframes characterBounce{
+    0%,100%{
+        transform:translate(-50%,0);
+    }
+    50%{
+        transform:translate(-50%,-7px);
+    }
+}
+
+/* Mission card */
+
+.challenge-card{
+    margin-top:18px;
+    background:white;
+    color:#182033;
+    border-radius:20px;
+    padding:25px;
+    position:relative;
+}
+
+.challenge-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.level-badge{
+    background:#eef0ff;
+    color:#5664d9;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.timer{
+    background:#fff0e7;
+    color:#c76728;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:800;
+}
+
+.challenge-card h2{
+    font-size:22px;
+    margin-bottom:8px;
+}
+
+.challenge-card .question-description{
+    color:#6c768a;
+    margin-bottom:20px;
+    line-height:1.5;
+}
+
+/* ================= FIXED MISSION OPTIONS ================= */
+
+.mission-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:20px;
+}
+
+.mission-option{
+    display:block;
+    width:100%;
+    min-height:60px;
+    padding:17px 18px;
+    border:2px solid #e0e5ee;
+    border-radius:13px;
+    background:#fbfcfe;
+    text-align:left;
+    font-weight:700;
+    font-size:14px;
+    color:#273149;
+    cursor:pointer;
+    transition:all .25s ease;
+    position:relative;
+    z-index:10;
+    pointer-events:auto;
+}
+
+.mission-option:hover{
+    border-color:#6472e8;
+    background:#f3f5ff;
+    transform:translateY(-2px);
+}
+
+.mission-option:active{
+    transform:scale(.98);
+}
+
+.mission-option:disabled{
+    cursor:not-allowed;
+}
+
+.mission-option.correct{
+    border-color:#40a66a;
+    background:#e8f8ee;
+    color:#287d4b;
+}
+
+.mission-option.wrong{
+    border-color:#df6c6c;
+    background:#ffeded;
+    color:#b04444;
+}
+
+.mission-feedback{
+    min-height:25px;
+    margin-top:15px;
+    font-weight:700;
+}
+
+.challenge-actions{
+    margin-top:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.back-map{
+    background:#eef1f7;
+    color:#5c667b;
+    padding:11px 16px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+.next-level{
+    background:#5967e8;
+    color:white;
+    padding:11px 20px;
+    border-radius:10px;
+    font-weight:800;
+    display:none;
+}
+
+.next-level.show{
+    display:block;
+}
+
+/* Mission complete */
+
+.mission-complete{
+    display:none;
+    text-align:center;
+    padding:35px 20px;
+}
+
+.mission-complete.show{
+    display:block;
+}
+
+.mission-complete .badge{
+    font-size:70px;
+    margin-bottom:15px;
+}
+
+.mission-complete h2{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.mission-complete p{
+    color:#727d91;
+    margin-bottom:20px;
+}
+
+/* ================= TEACH BACK ================= */
+
+.textarea{
+    width:100%;
+    min-height:170px;
+    border:1px solid #dfe4ed;
+    border-radius:13px;
+    padding:15px;
+    resize:none;
+    outline:none;
+    font-family:inherit;
+}
+
+/* ================= MASTERY ================= */
+
+.mastery-circle{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    border:15px solid #6472e8;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:35px;
+    font-weight:900;
+    margin:20px auto;
+}
+
+/* ================= TABLE ================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:15px;
+    border-bottom:1px solid #edf0f5;
+    text-align:left;
+}
+
+th{
+    color:#667188;
+    font-size:13px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:80px;
+    }
+
+    .logo{
+        font-size:0;
+    }
+
+    .logo span{
+        font-size:22px;
+    }
+
+    .nav-item{
+        text-align:center;
+        font-size:0;
+    }
+
+    .nav-item span{
+        font-size:18px;
+        margin:0;
+    }
+
+    .main{
+        margin-left:80px;
+        width:calc(100% - 80px);
+    }
+
+    .grid-3,
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .mission-options{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .content{
+        padding:18px;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .search{
+        width:190px;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .level-track{
+        transform:scale(.85);
+        transform-origin:top center;
+        margin-bottom:-10px;
+    }
+
+    .challenge-actions{
+        flex-direction:column;
+        gap:12px;
+        align-items:stretch;
+    }
+
+    .next-level,
+    .back-map{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= INTRO ================= -->
+
+<div id="intro">
+
+    <div class="intro-content">
+
+        <div class="intro-logo">
+            Learn<span>Intelli</span>
+        </div>
+
+        <div class="intro-tagline">
+            Don't just learn. Understand.
+        </div>
+
+        <div class="intro-visual">
+
+            <div class="intro-orbit"></div>
+
+            <div class="robot">🤖</div>
+            <div class="student">👩‍🎓</div>
+
+        </div>
+
+        <button class="start-btn" onclick="startApp()">
+            Start Learning →
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Learn<span>Intelli</span>
+    </div>
+
+    <div class="nav-item active" onclick="showPage('home',this)">
+        <span>⌂</span> Home
+    </div>
+
+    <div class="nav-item" onclick="showPage('learn',this)">
+        <span>📖</span> Adaptive Learning
+    </div>
+
+    <div class="nav-item" onclick="showPage('visual',this)">
+        <span>🌱</span> Visual Learning
+    </div>
+
+    <div class="nav-item" onclick="showPage('quiz',this)">
+        <span>🧠</span> Quiz
+    </div>
+
+    <div class="nav-item" onclick="showPage('teach',this)">
+        <span>💬</span> Teach It Back
+    </div>
+
+    <div class="nav-item" onclick="showPage('mission',this)">
+        <span>🎮</span> Smart Mission
+    </div>
+
+    <div class="nav-item" onclick="showPage('mastery',this)">
+        <span>🏆</span> Mastery
+    </div>
+
+    <div class="nav-item" onclick="showPage('teacher',this)">
+        <span>📊</span> Teacher Dashboard
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+    <header class="topbar">
+
+        <input
+            class="search"
+            id="conceptSearch"
+            placeholder="Search concepts..."
+            onkeydown="searchConcept(event)"
+        >
+
+        <div class="profile">
+            <span>Srushti</span>
+            <div class="avatar">👩‍💻</div>
+        </div>
+
+    </header>
+
+
+    <div class="content">
+
+
+<!-- ================= HOME ================= -->
+
+<section id="home" class="page active">
+
+    <div class="hero">
+
+        <h2>Welcome back 👋</h2>
+
+        <p>
+            Your learning path is adapting to how you understand concepts.
+        </p>
+
+        <div class="diagnosis">
+
+            <div class="tag" id="primaryGap">Primary Gap: —</div>
+<div class="tag" id="secondaryGap">Secondary Gap: Visualization</div>
+<div class="tag" id="currentConcept">Current Concept: Photosynthesis</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="small">Concept Mastery</div>
+
+            <div class="stat" id="homeMastery">—</div>
+
+            <div class="progress">
+                <div class="progress-bar" id="homeMasteryBar" style="width:0%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="small">Learning Confidence</div>
+
+            <div class="stat" id="homeConfidence">—</div>
+
+            <div class="progress">
+                <div class="progress-bar" id="homeConfidenceBar" style="width:0%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="small">Mission XP</div>
+
+            <div class="stat" id="homeXP">0</div>
+
+            <div class="small">
+                Keep completing missions.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+    <div class="card">
+
+        <h2>AI Learning Diagnosis</h2>
+
+        <br>
+
+        <p class="small">
+            LearnIntelli analyses your performance across different learning
+            abilities instead of looking only at your final score.
+        </p>
+
+        <br>
+
+        <div>
+            Conceptual Understanding — <strong id="homeConceptScore">—</strong>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="width:0%"></div>
+        </div>
+
+        <div>
+            Visualization — <strong id="homeVisualScore">—</strong>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="width:0%"></div>
+        </div>
+
+        <div>
+            Application — <strong id="homeApplicationScore">—</strong>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="width:0%"></div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= LEARN ================= -->
+
+<section id="learn" class="page">
+
+    <h1>Adaptive Learning</h1>
+
+    <p class="subtitle">
+        Your learning content changes according to your learning gaps.
+    </p>
+
+
+    <div class="card">
+
+        <h2>Photosynthesis</h2>
+
+        <br>
+
+        <div class="lesson-box">
+
+            <p>
+                <strong>Photosynthesis</strong> is the process by which green
+                plants use light energy to convert carbon dioxide and water
+                into chemical energy stored mainly as glucose.
+            </p>
+
+            <br>
+
+            <p>
+                Chlorophyll captures light energy, while oxygen is released
+                as a by-product.
+            </p>
+
+            <br>
+
+            <strong>
+                Carbon Dioxide + Water + Light Energy → Glucose + Oxygen
+            </strong>
+
+            <ul class="info-list">
+
+                <li>Sunlight provides energy.</li>
+
+                <li>Water is absorbed by the roots.</li>
+
+                <li>Carbon dioxide enters through leaves.</li>
+
+                <li>Chlorophyll captures light energy.</li>
+
+                <li>Glucose stores chemical energy.</li>
+
+                <li>Oxygen is released.</li>
+
+            </ul>
+
+        </div>
+
+        <br>
+
+        <button class="primary" onclick="showPage('visual')">
+            Try Visual Explanation →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= VISUAL ================= -->
+
+<section id="visual" class="page">
+
+    <h1>Visual Learning</h1>
+
+    <p class="subtitle">
+        Understand the process visually instead of only reading theory.
+    </p>
+
+
+    <div class="card">
+
+        <h2>How Photosynthesis Works</h2>
+
+        <div class="plant-scene">
+
+            <div class="sun">☀️</div>
+
+            <div class="co2">CO₂</div>
+
+            <div class="water">💧 Water</div>
+
+            <div class="oxygen">O₂</div>
+
+            <div class="glucose">🍬 Glucose</div>
+
+            <div class="plant">
+
+                <div class="leaf">🌿</div>
+
+                <div class="root">🌱</div>
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="grid grid-3">
+
+            <div class="card">
+                <h3>☀️ Energy Input</h3>
+                <br>
+                <p class="small">
+                    Sunlight provides the energy needed to start photosynthesis.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🌿 Plant Process</h3>
+                <br>
+                <p class="small">
+                    Water comes from the roots and carbon dioxide enters through
+                    the leaves. Chlorophyll captures light energy.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🍬 Final Output</h3>
+                <br>
+                <p class="small">
+                    The plant produces glucose for stored chemical energy and
+                    releases oxygen.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= QUIZ ================= -->
+
+<section id="quiz" class="page">
+
+    <h1>Knowledge Check</h1>
+
+    <p class="subtitle">
+        Test whether you actually understand Photosynthesis.
+    </p>
+
+    <div class="card" id="quizContainer"></div>
+
+</section>
+
+
+<!-- ================= TEACH IT BACK ================= -->
+
+<section id="teach" class="page">
+
+    <h1>Teach It Back</h1>
+
+    <p class="subtitle">
+        Explain the concept in your own words.
+    </p>
+
+
+    <div class="card">
+
+        <h2>Explain Photosynthesis</h2>
+
+        <br>
+
+        <p class="small">
+            Imagine you are explaining this concept to a friend who has never
+            studied it.
+        </p>
+
+        <br>
+
+        <textarea
+            id="teachText"
+            class="textarea"
+            placeholder="Explain photosynthesis in your own words..."
+        ></textarea>
+
+        <br><br>
+
+        <button class="primary" onclick="checkTeachBack()">
+            Analyse My Explanation
+        </button>
+
+        <div id="teachResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SMART MISSION ================= -->
+
+<section id="mission" class="page">
+
+    <div class="mission-header">
+
+        <div class="mission-title">
+
+            <h1>Smart Mission</h1>
+
+            <p>
+                Learn • Apply • Decide • Master
+            </p>
+
+        </div>
+
+        <div>
+            <button class="secondary" onclick="resetMission()">
+                Restart Mission
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- MAP -->
+
+    <div class="mission-map">
+
+        <div class="map-top">
+
+            <div class="map-title">
+                🌿 Photosynthesis Mission
+            </div>
+
+            <div class="xp">
+                ⭐ XP: <span id="missionXP">0</span>
+            </div>
+
+        </div>
+
+
+        <!-- LEVEL TRACK -->
+
+        <div class="level-track">
+
+            <div class="level-line"></div>
+
+            <div
+                class="level-line-progress"
+                id="levelProgress"
+            ></div>
+
+
+            <!-- LEVEL 1 -->
+
+            <div
+                class="level-node current"
+                id="levelNode1"
+            >
+
+                <div class="level-circle">
+                    1
+                </div>
+
+                <div class="level-name">
+                    Foundation
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL 2 -->
+
+            <div
+                class="level-node locked"
+                id="levelNode2"
+            >
+
+                <div class="level-circle">
+                    🔒
+                </div>
+
+                <div class="level-name">
+                    Process
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL 3 -->
+
+            <div
+                class="level-node locked"
+                id="levelNode3"
+            >
+
+                <div class="level-circle">
+                    🔒
+                </div>
+
+                <div class="level-name">
+                    Application
+                </div>
+
+            </div>
+
+
+            <!-- LEVEL 4 -->
+
+            <div
+                class="level-node locked"
+                id="levelNode4"
+            >
+
+                <div class="level-circle">
+                    🔒
+                </div>
+
+                <div class="level-name">
+                    Final Challenge
+                </div>
+
+            </div>
+
+
+            <!-- CHARACTER -->
+
+            <div class="character-wrap">
+
+                <div
+                    class="map-character"
+                    id="mapCharacter"
+                >
+                    👩‍🔬
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHALLENGE -->
+
+        <div class="challenge-card" id="missionChallenge">
+
+            <div class="challenge-top">
+
+                <div
+                    class="level-badge"
+                    id="missionLevelBadge"
+                >
+                    LEVEL 1 • FOUNDATION
+                </div>
+
+                <div class="timer">
+                    ⏱ <span id="missionTimer">20</span>s
+                </div>
+
+            </div>
+
+
+            <h2 id="missionQuestionTitle">
+                Collect the essentials
+            </h2>
+
+            <p
+                class="question-description"
+                id="missionQuestion"
+            >
+                Which combination is required for photosynthesis?
+            </p>
+
+
+            <!--
+                FIX:
+                Buttons are now permanently present.
+                JavaScript only changes their text and state.
+            -->
+
+            <div class="mission-options">
+
+                <button
+                    type="button"
+                    class="mission-option"
+                    id="missionOption0"
+                    onclick="answerMission(0,this)"
+                ></button>
+
+                <button
+                    type="button"
+                    class="mission-option"
+                    id="missionOption1"
+                    onclick="answerMission(1,this)"
+                ></button>
+
+                <button
+                    type="button"
+                    class="mission-option"
+                    id="missionOption2"
+                    onclick="answerMission(2,this)"
+                ></button>
+
+                <button
+                    type="button"
+                    class="mission-option"
+                    id="missionOption3"
+                    onclick="answerMission(3,this)"
+                ></button>
+
+            </div>
+
+
+            <div
+                class="mission-feedback"
+                id="missionFeedback"
+            ></div>
+
+
+            <div class="challenge-actions">
+
+                <button
+                    type="button"
+                    class="back-map"
+                    onclick="backToMissionMap()"
+                >
+                    ← Back to Map
+                </button>
+
+                <button
+                    type="button"
+                    class="next-level"
+                    id="nextMissionBtn"
+                    onclick="goNextMissionLevel()"
+                >
+                    Next Level →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETE -->
+
+        <div
+            class="mission-complete"
+            id="missionComplete"
+        >
+
+            <div class="badge">
+                🏆
+            </div>
+
+            <h2>Mission Complete!</h2>
+
+            <p>
+                You successfully completed all four Photosynthesis challenges.
+            </p>
+
+            <button
+                type="button"
+                class="primary"
+                onclick="resetMission()"
+            >
+                Play Mission Again
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MASTERY ================= -->
+
+<section id="mastery" class="page">
+
+    <h1>Mastery</h1>
+
+    <p class="subtitle">
+        Your learning progress based on verified understanding.
+    </p>
+
+
+    <div class="grid grid-2">
+
+        <div class="card">
+
+            <h2>Photosynthesis</h2>
+
+            <div class="mastery-circle" id="masteryValue">
+                —
+            </div>
+
+            <p class="small" id="masteryStatus" style="text-align:center">
+                No activities completed yet
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Learning Gain</h2>
+
+            <br>
+
+            <p>
+                Conceptual Understanding
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar" id="masteryConceptBar" style="width:0%"></div>
+            </div>
+
+            <p>
+                Application
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar" id="masteryApplicationBar" style="width:0%"></div>
+            </div>
+
+            <p>
+                Visualization
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar" id="masteryVisualBar" style="width:0%"></div>
+            </div>
+
+            <p>
+                Teach It Back
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar" id="masteryTeachBar" style="width:0%"></div>
+            </div>
+
+            <br>
+
+            <strong id="masteryStatusText">
+                Status: No activities completed yet
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TEACHER ================= -->
+
+<section id="teacher" class="page">
+
+    <h1>Teacher Dashboard</h1>
+
+    <p class="subtitle">
+        AI-powered classroom learning insights.
+    </p>
+
+
+    <!-- CLASS OVERVIEW -->
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="small">
+                Class Mastery
+            </div>
+
+            <div class="stat" id="classMastery">
+                0%
+            </div>
+
+            <div class="small">
+                Average understanding
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="small">
+                Students Needing Support
+            </div>
+
+            <div class="stat" id="supportStudents">
+                0
+            </div>
+
+            <div class="small">
+                AI identified learning gaps
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="small">
+                Most Common Gap
+            </div>
+
+            <div
+                class="stat"
+                id="commonGap"
+                style="font-size:22px"
+            >
+                —
+            </div>
+
+            <div class="small">
+                Across the classroom
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- STUDENT OVERVIEW -->
+
+    <div class="card">
+
+        <h2>
+            👩‍🎓 Student Learning Overview
+        </h2>
+
+        <p
+            class="small"
+            style="margin-top:8px"
+        >
+            AI-generated learning insights for each student.
+        </p>
+
+        <br>
+
+
+        <div style="overflow-x:auto">
+        <table>
+
+            <thead>
+
+                <tr>
+    <th>Student</th>
+    <th>Concept</th>
+    <th>Mastery</th>
+    <th>Quiz</th>
+    <th>Visualization</th>
+    <th>Mission</th>
+    <th>Completion</th>
+    <th>AI Insight</th>
+</tr>
+
+            </thead>
+
+
+            <tbody id="studentTableBody">
+
+            </tbody>
+
+        </table>
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- AI CLASSROOM INSIGHTS -->
+
+    <div class="card">
+
+        <h2>
+            🤖 AI Classroom Insights
+        </h2>
+
+        <br>
+
+        <div
+            id="classAIInsights"
+            class="small"
+            style="line-height:1.8"
+        >
+
+        </div>
+
+    </div>
+
+</section>
+
+    </div>
+
+</main>
+
+</div>
+
+
+
+<script>
+const API_BASE = "http://127.0.0.1:5000";
+const ANALYZE_API = API_BASE + "/api/ai-agent/analyze";
+const TEACH_BACK_API = API_BASE + "/api/ai-agent/teach-back";
+const TEACHER_API = API_BASE + "/api/teacher/students";
+
+const STUDENT_NAME = "Srushti";
+const CONCEPT = "Photosynthesis";
+
+let studentData = {
+    id: localStorage.getItem("learnintelli_student_id") || null,
+    name: STUDENT_NAME,
+    branch: "IT",
+    currentConcept: CONCEPT,
+    quizScore: null,
+    conceptScore: null,
+    applicationScore: null,
+    visualizationScore: null,
+    teachBackScore: null,
+    learningGap: "",
+    recommendedAction: "",
+    missionXP: 0,
+    quizAttempted: false,
+    visualCompleted: false,
+    missionCompleted: false,
+    teachBackCompleted: false,
+    mastery: null,
+    completionPercent: 0
+};
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function valueOrDash(value, attempted){
+    return attempted && value !== null && value !== undefined
+        ? Math.round(Number(value)) + "%"
+        : "—";
+}
+
+function numericOrNull(value){
+    return value === null || value === undefined || value === ""
+        ? null
+        : Number(value);
+}
+
+function calculateLocalMastery(){
+    const scores = [];
+
+    if(studentData.quizAttempted && studentData.quizScore !== null)
+        scores.push(Number(studentData.quizScore));
+
+    if(studentData.visualCompleted && studentData.visualizationScore !== null)
+        scores.push(Number(studentData.visualizationScore));
+
+    if(studentData.missionCompleted && studentData.applicationScore !== null)
+        scores.push(Number(studentData.applicationScore));
+
+    if(studentData.teachBackCompleted && studentData.teachBackScore !== null)
+        scores.push(Number(studentData.teachBackScore));
+
+    if(!scores.length) return null;
+
+    return Math.round(
+        scores.reduce((sum, score) => sum + score, 0) / scores.length
+    );
+}
+
+function calculateCompletion(){
+    let completed = 0;
+
+    if(studentData.quizAttempted) completed++;
+    if(studentData.visualCompleted) completed++;
+    if(studentData.missionCompleted) completed++;
+    if(studentData.teachBackCompleted) completed++;
+
+    return Math.round((completed / 4) * 100);
+}
+
+function syncLocalStudent(data){
+    if(!data) return;
+
+    if(data.id !== undefined && data.id !== null){
+        studentData.id = data.id;
+        localStorage.setItem("learnintelli_student_id", data.id);
+    }
+
+    studentData.quizScore = numericOrNull(data.quiz_score);
+    studentData.conceptScore = numericOrNull(data.concept_score);
+    studentData.visualizationScore = numericOrNull(data.visualization_score);
+    studentData.applicationScore = numericOrNull(data.application_score);
+    studentData.teachBackScore = numericOrNull(data.teach_back_score);
+
+    studentData.quizAttempted = Boolean(data.quiz_attempted);
+    studentData.visualCompleted = Boolean(data.visual_completed);
+    studentData.missionCompleted = Boolean(data.mission_completed);
+    studentData.teachBackCompleted = Boolean(data.teach_back_completed);
+
+    studentData.learningGap = data.learning_gap || "";
+    studentData.recommendedAction = data.recommended_action || "";
+    studentData.mastery = data.mastery !== null && data.mastery !== undefined
+        ? Math.round(Number(data.mastery))
+        : calculateLocalMastery();
+
+    studentData.completionPercent =
+        data.completion_percent !== undefined
+            ? Number(data.completion_percent)
+            : calculateCompletion();
+
+    studentData.missionXP = Number(data.mission_xp || studentData.missionXP || 0);
+
+    updateStudentDashboard();
+    updateMasteryPage();
+}
+
+async function saveActivity(activityType, scores = {}){
+    const payload = {
+        student_id: studentData.id,
+        student_name: STUDENT_NAME,
+        concept: CONCEPT,
+        activity_type: activityType,
+        quiz_score: scores.quiz_score !== undefined
+            ? scores.quiz_score
+            : (studentData.quizAttempted ? studentData.quizScore : null),
+        visualization_score: scores.visualization_score !== undefined
+            ? scores.visualization_score
+            : (studentData.visualCompleted ? studentData.visualizationScore : null),
+        application_score: scores.application_score !== undefined
+            ? scores.application_score
+            : (studentData.missionCompleted ? studentData.applicationScore : null),
+        teach_back_score: scores.teach_back_score !== undefined
+            ? scores.teach_back_score
+            : (studentData.teachBackCompleted ? studentData.teachBackScore : null),
+        mission_xp: studentData.missionXP
+    };
+
+    try{
+        const response = await fetch(ANALYZE_API, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if(!response.ok || data.status !== "success"){
+            throw new Error(data.message || "AI analysis failed");
+        }
+
+        syncLocalStudent(data.student);
+        return data;
+    }catch(error){
+        console.error("LearnIntelli AI error:", error);
+        return null;
+    }
+}
+
+/* =========================================================
+   STUDENT DASHBOARD
+   ========================================================= */
+
+function updateStudentDashboard(){
+
+    const gapElement = document.getElementById("primaryGap");
+    const secondaryElement = document.getElementById("secondaryGap");
+    const conceptElement = document.getElementById("currentConcept");
+
+    if(gapElement){
+        gapElement.textContent =
+            "Primary Gap: " +
+            (studentData.learningGap || "Not analyzed yet");
+    }
+
+    if(secondaryElement){
+        secondaryElement.textContent =
+            "Secondary Gap: " +
+            (
+                studentData.visualCompleted
+                    ? "—"
+                    : "Visualization"
+            );
+    }
+
+    if(conceptElement){
+        conceptElement.textContent =
+            "Current Concept: " + studentData.currentConcept;
+    }
+
+    const mastery = studentData.mastery ?? calculateLocalMastery();
+    const masteryStat = document.getElementById("homeMastery");
+    const masteryBar = document.getElementById("homeMasteryBar");
+
+    if(masteryStat) masteryStat.textContent =
+        mastery === null ? "—" : mastery + "%";
+
+    if(masteryBar) masteryBar.style.width =
+        mastery === null ? "0%" : mastery + "%";
+
+    const confidenceStat = document.getElementById("homeConfidence");
+    const confidenceBar = document.getElementById("homeConfidenceBar");
+
+    const confidence =
+        studentData.quizAttempted
+            ? Math.round(
+                (
+                    Number(studentData.quizScore || 0) +
+                    Number(studentData.teachBackScore || 0)
+                ) /
+                (
+                    studentData.teachBackCompleted ? 2 : 1
+                )
+            )
+            : null;
+
+    if(confidenceStat)
+        confidenceStat.textContent =
+            confidence === null ? "—" : confidence + "%";
+
+    if(confidenceBar)
+        confidenceBar.style.width =
+            confidence === null ? "0%" : confidence + "%";
+
+    const conceptScore = document.getElementById("homeConceptScore");
+    const visualScore = document.getElementById("homeVisualScore");
+    const applicationScore = document.getElementById("homeApplicationScore");
+
+    if(conceptScore)
+        conceptScore.textContent =
+            valueOrDash(studentData.quizScore, studentData.quizAttempted);
+
+    if(visualScore)
+        visualScore.textContent =
+            valueOrDash(studentData.visualizationScore, studentData.visualCompleted);
+
+    if(applicationScore)
+        applicationScore.textContent =
+            valueOrDash(studentData.applicationScore, studentData.missionCompleted);
+
+    const xp = document.getElementById("homeXP");
+    if(xp) xp.textContent = studentData.missionXP;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function startApp(){
+    document.getElementById("intro").style.display = "none";
+}
+
+function showPage(pageId, element){
+
+    document.querySelectorAll(".page").forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    const page = document.getElementById(pageId);
+
+    if(page) page.classList.add("active");
+
+    document.querySelectorAll(".nav-item").forEach(item=>{
+        item.classList.remove("active");
+    });
+
+    if(element) element.classList.add("active");
+
+    if(pageId === "teacher") loadTeacherDashboard();
+
+    if(pageId === "mastery") updateMasteryPage();
+
+    if(pageId === "visual" && !studentData.visualCompleted){
+        studentData.visualizationScore = 100;
+        studentData.visualCompleted = true;
+
+        saveActivity("visual", {
+            visualization_score: 100
+        });
+    }
+
+    window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function searchConcept(event){
+    if(event.key !== "Enter") return;
+
+    const value =
+        document.getElementById("conceptSearch")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const concepts = {
+        photosynthesis:"Photosynthesis",
+        "neural networks":"Neural Networks",
+        queue:"Queue"
+    };
+
+    if(concepts[value]){
+        alert(
+            concepts[value] +
+            " is available in the LearnIntelli prototype."
+        );
+        showPage("learn");
+    }else{
+        alert(
+            "Concept not available yet.\n\nAvailable concepts:\nPhotosynthesis\nNeural Networks\nQueue"
+        );
+    }
+}
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+
+const quizQuestions = [
+    {
+        question:"What is the main source of energy for photosynthesis?",
+        options:["Sunlight","Oxygen","Glucose","Soil"],
+        answer:0
+    },
+    {
+        question:"Which gas is taken in by plants during photosynthesis?",
+        options:["Oxygen","Nitrogen","Carbon Dioxide","Hydrogen"],
+        answer:2
+    },
+    {
+        question:"What is mainly produced and stored as chemical energy?",
+        options:["Glucose","Carbon Dioxide","Water","Chlorophyll"],
+        answer:0
+    }
+];
+
+let currentQuiz = 0;
+let quizScore = 0;
+
+function loadQuiz(){
+
+    const container = document.getElementById("quizContainer");
+    const q = quizQuestions[currentQuiz];
+
+    container.innerHTML = `
+        <div class="small">
+            Question ${currentQuiz + 1} of ${quizQuestions.length}
+        </div>
+        <br>
+        <div class="quiz-question">${q.question}</div>
+        ${q.options.map((option,index)=>`
+            <div class="option" onclick="answerQuiz(${index},this)">
+                ${option}
+            </div>
+        `).join("")}
+    `;
+}
+
+function answerQuiz(index, element){
+
+    const q = quizQuestions[currentQuiz];
+
+    document.querySelectorAll("#quizContainer .option")
+        .forEach(option=>{
+            option.style.pointerEvents = "none";
+        });
+
+    if(index === q.answer){
+        element.classList.add("correct");
+        quizScore++;
+    }else{
+        element.classList.add("wrong");
+        document.querySelectorAll("#quizContainer .option")[q.answer]
+            .classList.add("correct");
+    }
+
+    setTimeout(()=>{
+        currentQuiz++;
+
+        if(currentQuiz < quizQuestions.length){
+            loadQuiz();
+        }else{
+            showQuizResult();
+        }
+    },700);
+}
+
+async function showQuizResult(){
+
+    const percentage =
+        Math.round(
+            (quizScore / quizQuestions.length) * 100
+        );
+
+    studentData.quizScore = percentage;
+    studentData.conceptScore = percentage;
+    studentData.quizAttempted = true;
+
+    const container = document.getElementById("quizContainer");
+
+    container.innerHTML = `
+        <div class="result">
+            <div class="small">Quiz Completed</div>
+            <div class="result-score">${percentage}%</div>
+            <h2>${quizScore} / ${quizQuestions.length} Correct</h2>
+            <br>
+            <p class="small">
+                🤖 AI is analysing your learning performance...
+            </p>
+        </div>
+    `;
+
+    const data = await saveActivity("quiz", {
+        quiz_score: percentage
+    });
+
+    if(data && data.agent_result){
+
+        const result = data.agent_result;
+
+        container.innerHTML += `
+            <div class="card"
+                 style="margin-top:20px;background:#f7f8ff">
+
+                <h2>🤖 AI Learning Diagnosis</h2>
+                <br>
+
+                <p>
+                    <strong>Learning Gap:</strong>
+                    ${result.learning_gap}
+                </p>
+
+                <br>
+
+                <p>
+                    <strong>Why:</strong>
+                    ${result.reason}
+                </p>
+
+                <br>
+
+                <p>
+                    <strong>Recommended Action:</strong>
+                    ${result.recommended_action}
+                </p>
+
+                <br>
+
+                <button class="primary"
+                    onclick="continueWithAIRecommendation('${result.recommended_action}')">
+                    Continue with AI Recommendation →
+                </button>
+
+            </div>
+        `;
+    }
+
+    currentQuiz = 0;
+    quizScore = 0;
+}
+
+function continueWithAIRecommendation(action){
+
+    const lower = String(action || "").toLowerCase();
+
+    if(lower.includes("practice") || lower.includes("mission")){
+        showPage("mission");
+    }else if(lower.includes("visual")){
+        showPage("visual");
+    }else if(lower.includes("teach")){
+        showPage("teach");
+    }else{
+        showPage("learn");
+    }
+}
+
+/* =========================================================
+   TEACH IT BACK
+   ========================================================= */
+
+async function checkTeachBack(){
+
+    const text =
+        document.getElementById("teachText")
+        .value
+        .trim();
+
+    const resultBox =
+        document.getElementById("teachResult");
+
+    if(!text){
+        resultBox.innerHTML = `
+            <br>
+            <div class="card" style="background:#fff7f7">
+                Please explain the concept first.
+            </div>
+        `;
+        return;
+    }
+
+    resultBox.innerHTML = `
+        <br>
+        <div class="card" style="background:#f7f8ff">
+            🤖 AI is analysing your explanation...
+        </div>
+    `;
+
+    const response = await fetch(TEACH_BACK_API,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            student_id: studentData.id,
+            student_name: STUDENT_NAME,
+            concept: CONCEPT,
+            explanation: text
+        })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok || data.status !== "success"){
+        resultBox.innerHTML = `
+            <br>
+            <div class="card">
+                AI Agent connection failed. Make sure the backend is running.
+            </div>
+        `;
+        return;
+    }
+
+    const result = data.agent_result;
+
+    studentData.teachBackScore = Number(result.coverage);
+    studentData.teachBackCompleted = true;
+    studentData.learningGap = result.learning_gap;
+    studentData.recommendedAction = result.recommended_action;
+
+    if(data.student){
+        syncLocalStudent(data.student);
+    }else{
+        updateStudentDashboard();
+        updateMasteryPage();
+    }
+
+    resultBox.innerHTML = `
+        <br>
+        <div class="card" style="background:#f7f8ff">
+
+            <strong>
+                AI Understanding: ${result.understanding}
+            </strong>
+
+            <br><br>
+
+            <p>
+                <strong>Concept Coverage:</strong>
+                ${result.coverage}%
+            </p>
+
+            <br>
+
+            <p class="small">
+                ${result.feedback}
+            </p>
+
+        </div>
+    `;
+}
+
+/* =========================================================
+   SMART MISSION
+   ========================================================= */
+
+const missionLevels = [
+    {
+        title:"Collect the Essentials",
+        badge:"LEVEL 1 • FOUNDATION",
+        question:"Which combination is required for photosynthesis?",
+        options:[
+            "Light + Water + Carbon Dioxide",
+            "Oxygen + Soil + Glucose",
+            "Nitrogen + Oxygen + Water",
+            "Glucose + Oxygen + Soil"
+        ],
+        answer:0,
+        xp:50
+    },
+    {
+        title:"Build the Process",
+        badge:"LEVEL 2 • PROCESS",
+        question:"What is the correct basic representation of photosynthesis?",
+        options:[
+            "CO₂ + Water + Light → Glucose + Oxygen",
+            "Oxygen + Glucose → CO₂ + Water",
+            "Water + Oxygen → Glucose",
+            "CO₂ + Oxygen → Water"
+        ],
+        answer:0,
+        xp:75
+    },
+    {
+        title:"Solve the Situation",
+        badge:"LEVEL 3 • APPLICATION",
+        question:"A plant receives very little light. What is most likely to happen?",
+        options:[
+            "Photosynthesis becomes less efficient",
+            "Photosynthesis becomes unlimited",
+            "The plant produces more light",
+            "The plant stops needing carbon dioxide"
+        ],
+        answer:0,
+        xp:100
+    },
+    {
+        title:"Plant Rescue",
+        badge:"LEVEL 4 • FINAL CHALLENGE",
+        question:"A plant has water and carbon dioxide but receives no light. Which factor is limiting?",
+        options:[
+            "Light energy",
+            "Glucose",
+            "Oxygen",
+            "Soil color"
+        ],
+        answer:0,
+        xp:150
+    }
+];
+
+let currentMissionLevel = 0;
+let missionXP = 0;
+let missionTimerValue = 20;
+let missionTimerInterval = null;
+let missionAnswered = false;
+let missionCorrectCount = 0;
+
+function shuffleMissionOptions(level){
+    const correctAnswer = level.options[level.answer];
+    const shuffledOptions = [...level.options].sort(() => Math.random() - 0.5);
+    level.options = shuffledOptions;
+    level.answer = shuffledOptions.indexOf(correctAnswer);
+}
+
+function loadMissionLevel(){
+
+    clearInterval(missionTimerInterval);
+    missionAnswered = false;
+
+    const level = missionLevels[currentMissionLevel];
+    shuffleMissionOptions(level);
+
+    document.getElementById("missionLevelBadge").textContent = level.badge;
+    document.getElementById("missionQuestionTitle").textContent = level.title;
+    document.getElementById("missionQuestion").textContent = level.question;
+    document.getElementById("missionFeedback").textContent = "";
+    document.getElementById("nextMissionBtn").classList.remove("show");
+
+    for(let i=0;i<4;i++){
+        const button = document.getElementById("missionOption"+i);
+        button.textContent = level.options[i];
+        button.className = "mission-option";
+        button.disabled = false;
+        button.style.pointerEvents = "auto";
+    }
+
+    missionTimerValue = 20;
+    document.getElementById("missionTimer").textContent = missionTimerValue;
+
+    startMissionTimer();
+    updateMissionMap();
+}
+
+function startMissionTimer(){
+
+    clearInterval(missionTimerInterval);
+
+    missionTimerInterval = setInterval(()=>{
+
+        if(missionAnswered){
+            clearInterval(missionTimerInterval);
+            return;
+        }
+
+        missionTimerValue--;
+        document.getElementById("missionTimer").textContent = missionTimerValue;
+
+        if(missionTimerValue <= 0){
+            clearInterval(missionTimerInterval);
+            missionAnswered = true;
+            disableMissionButtons();
+
+            document.getElementById("missionFeedback").textContent =
+                "⏰ Time's up. Restart the level to try again.";
+
+            document.getElementById("missionFeedback").style.color = "#c76728";
+        }
+
+    },1000);
+}
+
+function disableMissionButtons(){
+    for(let i=0;i<4;i++){
+        const button = document.getElementById("missionOption"+i);
+        button.disabled = true;
+        button.style.pointerEvents = "none";
+    }
+}
+
+function enableMissionButtons(){
+    for(let i=0;i<4;i++){
+        const button = document.getElementById("missionOption"+i);
+        button.disabled = false;
+        button.style.pointerEvents = "auto";
+    }
+}
+
+function answerMission(index, button){
+
+    if(missionAnswered) return;
+
+    const level = missionLevels[currentMissionLevel];
+
+    missionAnswered = true;
+    clearInterval(missionTimerInterval);
+    disableMissionButtons();
+
+    if(index === level.answer){
+
+        button.classList.add("correct");
+
+        document.getElementById("missionFeedback").textContent =
+            "✓ Correct! Challenge completed.";
+
+        document.getElementById("missionFeedback").style.color = "#2d8a51";
+
+        missionCorrectCount++;
+        missionXP += level.xp;
+
+        document.getElementById("missionXP").textContent = missionXP;
+        document.getElementById("homeXP").textContent = missionXP;
+
+        completeCurrentMissionLevel();
+
+    }else{
+
+        button.classList.add("wrong");
+
+        document.getElementById("missionOption"+level.answer)
+            .classList.add("correct");
+
+        document.getElementById("missionFeedback").textContent =
+            "❌ Not quite! The correct answer is highlighted. Try again.";
+
+        document.getElementById("missionFeedback").style.color = "#b04444";
+
+        setTimeout(()=>{
+            missionAnswered = false;
+            clearMissionOptionStyles();
+            enableMissionButtons();
+            missionTimerValue = 20;
+            document.getElementById("missionTimer").textContent = missionTimerValue;
+            startMissionTimer();
+        },1200);
+    }
+}
+
+async function sendMissionPerformanceToAI(){
+
+    const missionScore =
+        Math.round(
+            (missionCorrectCount / missionLevels.length) * 100
+        );
+
+    studentData.applicationScore = missionScore;
+    studentData.missionCompleted =
+        currentMissionLevel === missionLevels.length - 1 &&
+        missionCorrectCount === missionLevels.length;
+
+    await saveActivity("mission",{
+        application_score: missionScore
+    });
+}
+
+function clearMissionOptionStyles(){
+    for(let i=0;i<4;i++){
+        const button = document.getElementById("missionOption"+i);
+        button.classList.remove("correct","wrong");
+    }
+}
+
+function completeCurrentMissionLevel(){
+
+    const currentNode =
+        document.getElementById("levelNode"+(currentMissionLevel+1));
+
+    currentNode.classList.remove("current","locked");
+    currentNode.classList.add("completed");
+    currentNode.querySelector(".level-circle").textContent = "✓";
+
+    const positions = ["7%","36%","65%","94%"];
+
+    document.getElementById("mapCharacter").style.left =
+        positions[currentMissionLevel];
+
+    if(currentMissionLevel < missionLevels.length - 1){
+
+        const nextIndex = currentMissionLevel + 1;
+        const nextNode =
+            document.getElementById("levelNode"+(nextIndex+1));
+
+        nextNode.classList.remove("locked");
+        nextNode.classList.add("current");
+        nextNode.querySelector(".level-circle").textContent = nextIndex + 1;
+
+        document.getElementById("nextMissionBtn").classList.add("show");
+
+        document.getElementById("levelProgress").style.width =
+            ["29%","58%","87%"][currentMissionLevel];
+
+        sendMissionPerformanceToAI();
+
+    }else{
+
+        document.getElementById("levelProgress").style.width = "100%";
+
+        studentData.applicationScore = 100;
+        studentData.missionCompleted = true;
+        sendMissionPerformanceToAI();
+
+        setTimeout(()=>{
+            document.getElementById("missionChallenge").style.display = "none";
+            document.getElementById("missionComplete").classList.add("show");
+        },800);
+    }
+}
+
+function goNextMissionLevel(){
+    if(currentMissionLevel < missionLevels.length - 1){
+        currentMissionLevel++;
+        loadMissionLevel();
+    }
+}
+
+function backToMissionMap(){
+    document.getElementById("mission").scrollIntoView({behavior:"smooth"});
+}
+
+function updateMissionMap(){
+
+    for(let i=0;i<missionLevels.length;i++){
+
+        const node = document.getElementById("levelNode"+(i+1));
+
+        if(i < currentMissionLevel){
+            node.classList.remove("locked","current");
+            node.classList.add("completed");
+            node.querySelector(".level-circle").textContent = "✓";
+        }else if(i === currentMissionLevel){
+            node.classList.remove("locked","completed");
+            node.classList.add("current");
+            node.querySelector(".level-circle").textContent = i+1;
+        }else{
+            node.classList.add("locked");
+            node.classList.remove("current","completed");
+            node.querySelector(".level-circle").textContent = "🔒";
+        }
+    }
+
+    const positions = ["7%","36%","65%","94%"];
+    document.getElementById("mapCharacter").style.left =
+        positions[currentMissionLevel];
+}
+
+function resetMission(){
+
+    clearInterval(missionTimerInterval);
+
+    currentMissionLevel = 0;
+    missionXP = 0;
+    missionCorrectCount = 0;
+    missionAnswered = false;
+
+    studentData.applicationScore = null;
+    studentData.missionCompleted = false;
+
+    document.getElementById("missionXP").textContent = 0;
+    document.getElementById("homeXP").textContent = 0;
+
+    document.getElementById("missionComplete").classList.remove("show");
+    document.getElementById("missionChallenge").style.display = "block";
+    document.getElementById("levelProgress").style.width = "0%";
+
+    clearMissionOptionStyles();
+    enableMissionButtons();
+
+    loadMissionLevel();
+}
+
+/* =========================================================
+   MASTERY
+   ========================================================= */
+
+function updateMasteryPage(){
+
+    const mastery = studentData.mastery ?? calculateLocalMastery();
+
+    const circle = document.getElementById("masteryValue");
+    if(circle){
+        circle.textContent =
+            mastery === null ? "—" : mastery + "%";
+    }
+
+    const concept = document.getElementById("masteryConceptBar");
+    const visual = document.getElementById("masteryVisualBar");
+    const application = document.getElementById("masteryApplicationBar");
+    const teach = document.getElementById("masteryTeachBar");
+
+    if(concept)
+        concept.style.width =
+            studentData.quizAttempted ? studentData.quizScore + "%" : "0%";
+
+    if(visual)
+        visual.style.width =
+            studentData.visualCompleted ? "100%" : "0%";
+
+    if(application)
+        application.style.width =
+            studentData.missionCompleted ? studentData.applicationScore + "%" : "0%";
+
+    if(teach)
+        teach.style.width =
+            studentData.teachBackCompleted ? studentData.teachBackScore + "%" : "0%";
+
+    const status = document.getElementById("masteryStatusText");
+    if(status){
+        status.textContent =
+            mastery === null
+                ? "No activities completed yet"
+                : mastery >= 80
+                    ? "Strong progress toward mastery"
+                    : "Developing toward mastery";
+    }
+}
+
+/* =========================================================
+   TEACHER DASHBOARD
+   ========================================================= */
+
+let teacherStudents = [];
+
+async function loadTeacherDashboard(){
+
+    try{
+
+        const response = await fetch(TEACHER_API);
+        const data = await response.json();
+
+        if(data.status !== "success"){
+            throw new Error("Unable to load student data");
+        }
+
+        teacherStudents = data.students || [];
+        updateTeacherDashboard();
+
+    }catch(error){
+
+        console.error("Teacher Dashboard Error:",error);
+
+        const table = document.getElementById("studentTableBody");
+
+        if(table){
+            table.innerHTML = `
+                <tr>
+                    <td colspan="8"
+                        style="text-align:center;padding:25px">
+                        Unable to load student data.
+                        <br><br>
+                        <span class="small">
+                            Make sure the LearnIntelli backend is running.
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+}
+
+function updateTeacherDashboard(){
+
+    const attemptedStudents =
+        teacherStudents.filter(student =>
+            Number(student.completion_percent || 0) > 0
+        );
+
+    const masteryValues =
+        attemptedStudents
+            .map(student => Number(student.mastery))
+            .filter(value => !Number.isNaN(value));
+
+    const classMastery =
+        masteryValues.length
+            ? Math.round(
+                masteryValues.reduce((a,b)=>a+b,0) /
+                masteryValues.length
+            )
+            : 0;
+
+    document.getElementById("classMastery").textContent =
+        classMastery + "%";
+
+    document.getElementById("supportStudents").textContent =
+        attemptedStudents.filter(student =>
+            Number(student.mastery || 0) < 70
+        ).length;
+
+    const gapCount = {};
+
+    attemptedStudents.forEach(student=>{
+        const gap = student.learning_gap;
+
+        if(gap && gap !== "No Major Gap"){
+            gapCount[gap] = (gapCount[gap] || 0) + 1;
+        }
+    });
+
+    let commonGap = "No data";
+    let highestCount = 0;
+
+    Object.keys(gapCount).forEach(gap=>{
+        if(gapCount[gap] > highestCount){
+            highestCount = gapCount[gap];
+            commonGap = gap;
+        }
+    });
+
+    document.getElementById("commonGap").textContent = commonGap;
+
+    const table = document.getElementById("studentTableBody");
+
+    if(table){
+
+        table.innerHTML = "";
+
+        teacherStudents.forEach(student=>{
+
+            const quizAttempted = Boolean(student.quiz_attempted);
+            const visualCompleted = Boolean(student.visual_completed);
+            const missionCompleted = Boolean(student.mission_completed);
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>
+                    <strong>${student.name}</strong>
+                </td>
+
+                <td>
+                    ${student.concept || "—"}
+                </td>
+
+                <td>
+                    ${student.completion_percent > 0
+                        ? Math.round(Number(student.mastery || 0)) + "%"
+                        : "—"}
+                </td>
+
+                <td>
+                    ${valueOrDash(student.quiz_score, quizAttempted)}
+                </td>
+
+                <td>
+                    ${valueOrDash(student.visualization_score, visualCompleted)}
+                </td>
+
+                <td>
+                    ${valueOrDash(student.application_score, missionCompleted)}
+                </td>
+
+                <td>
+                    ${Math.round(Number(student.completion_percent || 0))}% 
+                    <span class="small">
+                        (${student.completed_activities || 0}/4)
+                    </span>
+                </td>
+
+                <td>
+                    ${
+                        Number(student.completion_percent || 0) === 0
+                            ? `<span class="small">No activity yet</span>`
+                            : `
+                                <strong>${student.learning_gap || "No Major Gap"}</strong>
+                                <br>
+                                <span class="small">
+                                    ${student.recommended_action || "Continue"}
+                                </span>
+                              `
+                    }
+                </td>
+            `;
+
+            table.appendChild(row);
+        });
+    }
+
+    const insightElement = document.getElementById("classAIInsights");
+
+    if(insightElement){
+
+        if(!attemptedStudents.length){
+
+            insightElement.innerHTML = `
+                <strong>🤖 AI Classroom Insight</strong>
+                <br><br>
+                No student activity has been recorded yet.
+                <br><br>
+                <span class="small">
+                    Student scores and learning gaps will appear automatically
+                    after activities are completed.
+                </span>
+            `;
+
+        }else{
+
+            const gapStudents =
+                attemptedStudents.filter(student =>
+                    student.learning_gap &&
+                    student.learning_gap !== "No Major Gap"
+                );
+
+            if(!gapStudents.length){
+
+                insightElement.innerHTML = `
+                    <strong>🤖 AI Classroom Insight</strong>
+                    <br><br>
+                    Current activity data shows no major learning gap.
+                    <br><br>
+                    <span class="small">
+                        AI will continue monitoring performance as students
+                        complete more activities.
+                    </span>
+                `;
+
+            }else{
+
+                const topGap = Object.keys(gapCount)
+                    .sort((a,b)=>gapCount[b]-gapCount[a])[0];
+
+                const topStudents = gapStudents
+                    .filter(student => student.learning_gap === topGap)
+                    .map(student => student.name)
+                    .join(", ");
+
+                insightElement.innerHTML = `
+                    <strong>🤖 AI Classroom Insight</strong>
+                    <br><br>
+                    AI detected <strong>${topGap}</strong> in
+                    <strong>${topStudents}</strong>.
+                    <br><br>
+                    <span class="small">
+                        Recommended intervention:
+                        ${gapStudents[0].recommended_action || "Personalized practice"}.
+                    </span>
+                `;
+            }
+        }
+    }
+}
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadQuiz();
+loadMissionLevel();
+updateStudentDashboard();
+updateMasteryPage();
+loadTeacherDashboard();
+
+</script>
+
+
+</body>
+</html>
